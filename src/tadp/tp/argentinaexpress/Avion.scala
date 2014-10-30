@@ -1,7 +1,9 @@
 package tadp.tp.argentinaexpress
 
-class Avion extends Transporte {
- def capacidad()={200}
-  def costo()={500}
-  def velocidad()={500}
+class Avion (override val volumenDeCarga : Int = 200,
+    override val costoPorKm : Int = 500,
+    override val velocidad : Int = 500,
+    override val serviciosExtra : Set[ServicioExtra])
+extends Transporte (volumenDeCarga, costoPorKm, velocidad, serviciosExtra){
+
 }
