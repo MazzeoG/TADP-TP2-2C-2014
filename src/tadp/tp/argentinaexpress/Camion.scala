@@ -10,7 +10,11 @@ extends Transporte (volumenDeCarga, costoPorKm, velocidad, serviciosExtra){
     true
   } //tienen refrigeracion
   
+  def sinEnvios{
+    
+  }
+  
   def costo(){
-    (cantidadPeajesEntre(sucursal1, sucursal2)*12)+...;
+    //(cantidadPeajesEntre(sucursal1, sucursal2)*12)+...;
   }
 }
