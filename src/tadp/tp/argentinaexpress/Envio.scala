@@ -1,6 +1,6 @@
 package tadp.tp.argentinaexpress
 
-class Envio (val caracteristicas : Set[CaractEnvio], val sucursalOrigen: Sucursal, val sucursalDestino :Sucursal) extends CalculadorDistancia{
+class Envio (val caracteristicas : Set[CaractEnvio], val sucursalOrigen: Sucursal, val sucursalDestino :Sucursal, val volumen :Int) extends CalculadorDistancia{
 	val precio:Int;
 	val costo: Int;
   //val costoBase:Int

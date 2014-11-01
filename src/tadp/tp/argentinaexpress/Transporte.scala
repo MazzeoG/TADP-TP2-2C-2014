@@ -1,12 +1,12 @@
 package tadp.tp.argentinaexpress
 
-class Transporte (val volumenDeCarga : Int,
-    val costoPorKm : Int,
-    val velocidad : Int,
-    val serviciosExtra : Set[ServicioExtra])
+class Transporte (val serviciosExtra : Set[ServicioExtra])
     extends CalculadorDistancia{
-var sucursalDestino: Sucursal;
-val enviosAsignados: Set[Envio];
+  val volumenDeCarga : Int;
+  val costoPorKm : Int;
+  val velocidad : Int;
+  var sucursalDestino: Sucursal;
+  val enviosAsignados: Set[Envio];
 //  def espacioDisponible():Int={
 //    this.volumenDeCarga - this.volumenOcupado
 //  }
@@ -19,6 +19,14 @@ val enviosAsignados: Set[Envio];
   }
   def puedeCargarRefrigerados() ={
     false
+  }
+  
+  def sinEnviosAsignados{
+    this.enviosAsignados.isEmpty
+  }
+  
+  def volumenEnvios {
+    var volumenTotal = this.enviosAsignados.foreach((e:Envio) => e.volumen)
   }
   
 }
