@@ -1,6 +1,6 @@
 package tadp.tp.argentinaexpress
 
-class Normal extends CaractEnvio{
+class Normal extends Envio{
 def precio()={80}
-  def costoBase()={10}
+ def costoBase()={10}
 }

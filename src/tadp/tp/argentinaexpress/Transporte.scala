@@ -7,6 +7,7 @@ class Transporte (val serviciosExtra : Set[ServicioExtra])
   val velocidad : Int;
   var sucursalDestino: Sucursal;
   val enviosAsignados: Set[Envio];
+  var volumenTotal:Int;
 //  def espacioDisponible():Int={
 //    this.volumenDeCarga - this.volumenOcupado
 //  }
@@ -25,8 +26,9 @@ class Transporte (val serviciosExtra : Set[ServicioExtra])
     this.enviosAsignados.isEmpty
   }
   
-  def volumenEnvios {
-    var volumenTotal = this.enviosAsignados.foreach((e:Envio) => e.volumen)
+  def volumenEnvios() :Int = {
+     this.enviosAsignados.foreach((e:Envio) =>volumenTotal+= e.volumen)
+     volumenTotal
   }
   
 }
