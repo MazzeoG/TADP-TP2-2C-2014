@@ -6,6 +6,7 @@ extends Transporte (serviciosExtra){
   val volumenDeCarga : Int = 45;
   val costoPorKm : Int = 100;
   val velocidad : Int = 60;
+  val valorPeaje : Int = 12;
 
   override def puedeCargarRefrigerados() ={
     true

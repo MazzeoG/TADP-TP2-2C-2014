@@ -5,6 +5,7 @@ extends Transporte (serviciosExtra) {
   val volumenDeCarga : Int = 9;
   val costoPorKm : Int = 40;
   val velocidad : Int = 80;
+  val valorPeaje : Int = 6;
 
   def costo(envio:Envio){
     envio match {

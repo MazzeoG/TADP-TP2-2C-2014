@@ -8,6 +8,7 @@ class Transporte (val serviciosExtra : Set[ServicioExtra])
   var sucursalDestino: Sucursal;
   val enviosAsignados: Set[Envio];
   var volumenOcupado:Int;
+  
   def espacioDisponible():Int={
     this.volumenDeCarga - this.volumenEnvios
   }
@@ -31,23 +32,36 @@ class Transporte (val serviciosExtra : Set[ServicioExtra])
      volumenOcupado
   }
   
-  def puedeCargar(envio:Envio) {
+  def volumenDisponible() :Int = {
+    this.volumenDeCarga - this.volumenEnvios
+  }
+  
+  def puedeCargar(envio:Envio) : Boolean ={
+    var cargable : Boolean = coincideDestino(envio) && entraEnDestino(envio) && entraEnTransporte(envio);
     envio match {
-  case envio :Fragil => puedeCargarFragiles
-  case envio :Urgente => puedeCargarUrgentes
-  case envio :Refrigeracion => puedeCargarRefrigerados
-  case _ => 
+  case envio :Fragil => cargable = cargable && puedeCargarFragiles
+  case envio :Urgente => cargable = cargable && puedeCargarUrgentes
+  case envio :Refrigeracion => cargable = cargable && puedeCargarRefrigerados
+  case _ =>
     }
-       
-    def coincideDestino(envio:Envio){
-      if(this.enviosAsignados.isEmpty){true} 
-      else {
-        this.enviosAsignados.forall((e:Envio) => e.sucursalDestino==envio.sucursalDestino)
-      } 
-    }
-    
-    def entraEnDestino(envio:Envio){
-      envio.sucursalDestino.volumenDisponible >= envio.volumen 
+    cargable
+  }
+  
+
+  def coincideDestino(envio:Envio) : Boolean = {
+    if(this.enviosAsignados.isEmpty)
+      true
+    else {
+      this.enviosAsignados.forall((e:Envio) => e.sucursalDestino==envio.sucursalDestino);
     }
   }
+
+  def entraEnDestino(envio:Envio): Boolean ={
+    envio.sucursalDestino.volumenDisponible >= envio.volumen 
+  }
+  
+  def entraEnTransporte(envio:Envio) : Boolean ={
+    this.volumenDisponible >= envio.volumen
+  }
+  
 }
