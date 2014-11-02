@@ -4,10 +4,11 @@ class Sucursal (val transporte : Set[Transporte], val volumenTotal : Int) extend
 
   var envios : Set[Envio];
    var volumen:Int;
+   
   
-  def volumenDisponible(){
+  def volumenDisponible():Int={
     (this.volumenTotal) - (this.volumenEnvios);
-  }
+    }
   
   def volumenEnvios() : Int ={
    

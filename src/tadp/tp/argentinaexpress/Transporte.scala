@@ -7,10 +7,10 @@ class Transporte (val serviciosExtra : Set[ServicioExtra])
   val velocidad : Int;
   var sucursalDestino: Sucursal;
   val enviosAsignados: Set[Envio];
-  var volumenTotal:Int;
-//  def espacioDisponible():Int={
-//    this.volumenDeCarga - this.volumenOcupado
-//  }
+  var volumenOcupado:Int;
+  def espacioDisponible():Int={
+    this.volumenDeCarga - this.volumenEnvios
+  }
 
   def puedeCargarUrgentes() ={
     false
@@ -27,8 +27,27 @@ class Transporte (val serviciosExtra : Set[ServicioExtra])
   }
   
   def volumenEnvios() :Int = {
-     this.enviosAsignados.foreach((e:Envio) =>volumenTotal+= e.volumen)
-     volumenTotal
+     this.enviosAsignados.foreach((e:Envio) =>volumenOcupado+= e.volumen)
+     volumenOcupado
   }
   
+  def puedeCargar(envio:Envio) {
+    envio match {
+  case envio :Fragil => puedeCargarFragiles
+  case envio :Urgente => puedeCargarUrgentes
+  case envio :Refrigeracion => puedeCargarRefrigerados
+  case _ => 
+    }
+       
+    def coincideDestino(envio:Envio){
+      if(this.enviosAsignados.isEmpty){true} 
+      else {
+        this.enviosAsignados.forall((e:Envio) => e.sucursalDestino==envio.sucursalDestino)
+      } 
+    }
+    
+    def entraEnDestino(envio:Envio){
+      envio.sucursalDestino.volumenDisponible >= envio.volumen 
+    }
+  }
 }
