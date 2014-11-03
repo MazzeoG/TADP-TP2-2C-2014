@@ -14,14 +14,14 @@ extends Transporte (serviciosExtra){
   
   def costo(envio:Envio){
     envio match {
-      case envio: Fragil => (precioPeajes(envio)+ 5)*multiplicador
+      case envio: Refrigeracion => (precioPeajes(envio)+ 5)*multiplicador
       case _ => (precioPeajes(envio))*multiplicador
     }
   }
   
   def multiplicador():Int= {
-   if( (this.volumenDeCarga/5 >= this.volumenOcupado)){      //falta poner si suc destino u origen es casa central
-     1+(this.volumenOcupado/this.volumenDeCarga)
+   if( (this.volumenDeCarga/5 >= this.volumenEnvios)){      //falta poner si suc destino u origen es casa central
+     1+(this.volumenEnvios/this.volumenDeCarga)
    }
    else {
      1
@@ -30,6 +30,6 @@ extends Transporte (serviciosExtra){
   
   
   def precioPeajes(envio:Envio):Int={
-    (cantidadPeajesEntre(envio.sucursalOrigen,envio.sucursalDestino)*12)
+    (cantidadPeajesEntre(envio.sucursalOrigen,envio.sucursalDestino)*valorPeaje)
   }
 }

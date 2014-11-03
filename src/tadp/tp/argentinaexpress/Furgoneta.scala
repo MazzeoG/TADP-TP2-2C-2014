@@ -8,13 +8,14 @@ extends Transporte (serviciosExtra) {
   val valorPeaje : Int = 6;
 
   def costo(envio:Envio){
+    var costoFinal = 
     envio match {
       case envio: Fragil => (precioPeajes(envio)+ 5)*multiplicador
       case _ => (precioPeajes(envio))*multiplicador
     }
    }
  def multiplicador():Int= {
-   if( (this.volumenDeCarga/5 >= this.volumenOcupado)){      //falta poner si lleva 3 urgentes
+   if( (this.volumenDeCarga/5 >= this.volumenEnvios)){      //falta poner si lleva 3 urgentes
      2
    }
    else {
@@ -24,4 +25,6 @@ extends Transporte (serviciosExtra) {
   def precioPeajes(envio:Envio):Int={
     (cantidadPeajesEntre(envio.sucursalOrigen,envio.sucursalDestino)*6)
   }
+  
+  
 }

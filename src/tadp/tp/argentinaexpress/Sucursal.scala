@@ -16,11 +16,13 @@ class Sucursal (val transporte : Set[Transporte], val volumenTotal : Int, val Pa
     volumen;
   }
   
-  def asignarEnvioATransporte(envio: Envio): Transporte = {
-    var transporteAsignado : Transporte = null;
-    envio match {
-      case envio : Refrigeracion => transporteAsignado = transporte.find((t: Transporte) => t.puedeCargar(envio))
-    }
+  def asignarEnvioATransporte(envio: Envio): Option[Transporte] = {
+    var transporteAsignado : Option[Transporte] = null;
+
+    transporteAsignado = transporte.find((t: Transporte) => t.puedeCargar(envio))
+    
+    transporteAsignado.foreach(_.agregarEnvio(envio)) // No estoy seguro que esto ande
+    
     transporteAsignado
   }
   
