@@ -120,4 +120,20 @@ class Transporte (val serviciosExtra : Set[ServicioExtra])
     this
   }
   
+  def tieneSeguimientoGPS(): Boolean = {
+    !this.serviciosExtra.find((s: ServicioExtra) => s.soyGPS).isEmpty
+  }
+  
+  def tieneSeguimientoVideo(): Boolean = {
+    !this.serviciosExtra.find((s: ServicioExtra) => s.soyVideo).isEmpty
+  }
+  
+  def puedeLlevarAnimales() : Boolean = {
+    !this.serviciosExtra.find((s: ServicioExtra) => s.soyInfraestructuraAnimales).isEmpty
+  }
+  
+  def puedeLlevarSustancias() : Boolean = {
+    !this.serviciosExtra.find((s: ServicioExtra) => s.soyInfraestructuraSustancias).isEmpty
+  }
+  
 }
