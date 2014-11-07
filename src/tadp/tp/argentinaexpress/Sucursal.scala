@@ -16,7 +16,14 @@ class Sucursal (val transporte : Set[Transporte], val volumenTotal : Int, val Pa
     volumen;
   }
   
+  def agregarTransporte(tran : Transporte) ={
+    tran.sucursalOrigen = this
+    this.transporte.+(tran)
+  }
+  
+  // A traves de esta funcion se cargan los envios en los transportes, uno a la vez.
   def asignarEnvioATransporte(envio: Envio): Boolean = {
+    
     var transporteAsignado : Option[Transporte] = null;
 
     transporteAsignado = transporte.find((t: Transporte) => t.puedeCargar(envio))
