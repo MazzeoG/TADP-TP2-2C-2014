@@ -2,10 +2,11 @@ package tadp.tp.argentinaexpress
 
 class Furgoneta (override val serviciosExtra : Set[ServicioExtra])
 extends Transporte (serviciosExtra) {
-  val volumenDeCarga : Int = 9;
-  val costoPorKm : Int = 40;
-  val velocidad : Int = 80;
-  val valorPeaje : Int = 6;
+  override val volumenDeCarga : Int = 9;
+  override val costoPorKm : Int = 40;
+  override val velocidad : Int = 80;
+  override val valorPeaje : Int = 6;
+
 
   def costo(envio:Envio){
     var costoFinal = 
@@ -14,7 +15,7 @@ extends Transporte (serviciosExtra) {
       case _ => (precioPeajes(envio))*multiplicador
     }
    }
- def multiplicador():Int= {
+ override def multiplicador():Int= {
    if( (this.volumenDeCarga/5 >= this.volumenEnvios)){      //falta poner si lleva 3 urgentes
      2
    }
@@ -22,7 +23,7 @@ extends Transporte (serviciosExtra) {
      1
    }
  }
-  def precioPeajes(envio:Envio):Int={
+  override def precioPeajes(envio:Envio):Int={
     (cantidadPeajesEntre(envio.sucursalOrigen,envio.sucursalDestino)*6)
   }
   

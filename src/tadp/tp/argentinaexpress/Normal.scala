@@ -6,6 +6,6 @@ class Normal (override val caracteristicas : Set[Envio],
     override val volumen :Int,
     override val fecha :Tuple3[Int,Int,Int])
 extends Envio (caracteristicas, sucursalOrigen, sucursalDestino, volumen, fecha){
-def precio()={80}
- def costoBase()={10}
+	override def precio()={80}
+	def costoBase()={10}
 }

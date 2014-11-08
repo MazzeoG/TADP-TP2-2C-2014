@@ -2,35 +2,38 @@ package tadp.tp.argentinaexpress
 
 class Sucursal (val transporte : Set[Transporte], val volumenTotal : Int, val Pais : String) extends CalculadorDistancia{
 
-  var envios : Set[Envio];
-  var volumen:Int;
+  var envios : Set[Envio] = Set();
+  var volumen:Int = 0;
    
   
   def volumenDisponible():Int={
-    (this.volumenTotal) - (this.volumenEnvios);
+    (this.volumenTotal) - (this.volumenEnviosEnSucursal);
     }
   
-  def volumenEnvios() : Int ={
-   
-    this.transporte.foreach((t:Transporte) => volumen+=t.volumenEnvios);
-    volumen;
+  def volumenEnviosEnSucursal() : Int ={
+	this.transporte.map((t:Transporte) => t.volumenEnvios).sum
+    //this.transporte.foreach((t:Transporte) => volumen+=t.volumenEnvios);
+    //volumen;
   }
+
+   def volumenEnviosASucursal(destino : Sucursal) : Int ={
+	this.transporte.filter((t: Transporte)=> t.sucursalDestino == destino).map((t:Transporte) => t.volumenEnvios).sum
+    //this.transporte.foreach((t:Transporte) => volumen+=t.volumenEnvios);
+    //volumen;
+  } 
   
-  def agregarTransporte(tran : Transporte) ={
-    tran.sucursalOrigen = this
-    this.transporte.+(tran)
-  }
-  
-  // A traves de esta funcion se cargan los envios en los transportes, uno a la vez.
   def asignarEnvioATransporte(envio: Envio): Boolean = {
-    
-    var transporteAsignado : Option[Transporte] = null;
+    var transporteAsignado : Option[Transporte] = None;
 
     transporteAsignado = transporte.find((t: Transporte) => t.puedeCargar(envio))
     
-    transporteAsignado.foreach(_.agregarEnvio(envio)) // No estoy seguro que esto ande
+    if (!transporteAsignado.isEmpty && entraPedido(envio)) 
+    	transporteAsignado.get.agregarEnvio(envio)
     
     !transporteAsignado.isEmpty
   }
   
+  def entraPedido(envio:Envio): Boolean = { 
+    envio.sucursalDestino.volumenDisponible >= (envio.volumen + this.volumenEnviosASucursal(envio.sucursalDestino))
+  }
 }

@@ -7,13 +7,9 @@ class Envio (val caracteristicas : Set[Envio],
     val fecha :Tuple3[Int,Int,Int]) // Yo lo manejo como Tuple3[dd,mm,yyyy].
     extends CalculadorDistancia{
   
-	def precio():Int{
-	  
-	}
+	def precio():Int = ???
 	
-	def costo():Int{
-	  
-	}
+	def costo():Int = ???
 	
 	def calcularCostoEnvio (transporte: Transporte) : Int = {
 	  var valorRefrigeracion : Int = 0;

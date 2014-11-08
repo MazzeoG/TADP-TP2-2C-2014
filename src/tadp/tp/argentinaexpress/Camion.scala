@@ -3,10 +3,10 @@ package tadp.tp.argentinaexpress
 class Camion (override val serviciosExtra : Set[ServicioExtra])
 extends Transporte (serviciosExtra){
   
-  val volumenDeCarga : Int = 45;
-  val costoPorKm : Int = 100;
-  val velocidad : Int = 60;
-  val valorPeaje : Int = 12;
+  override val volumenDeCarga : Int = 45;
+  override val costoPorKm : Int = 100;
+  override val velocidad : Int = 60;
+  override val valorPeaje : Int = 12;
 
   override def puedeCargarRefrigerados() ={
     true
@@ -19,7 +19,7 @@ extends Transporte (serviciosExtra){
     }
   }
   
-  def multiplicador():Int= {
+  override def multiplicador():Int= {
    if( (this.volumenDeCarga/5 >= this.volumenEnvios)){      //falta poner si suc destino u origen es casa central
      1+(this.volumenEnvios/this.volumenDeCarga)
    }
@@ -29,7 +29,7 @@ extends Transporte (serviciosExtra){
  }
   
   
-  def precioPeajes(envio:Envio):Int={
+  override def precioPeajes(envio:Envio):Int={
     (cantidadPeajesEntre(envio.sucursalOrigen,envio.sucursalDestino)*valorPeaje)
   }
 }

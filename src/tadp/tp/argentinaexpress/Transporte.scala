@@ -1,16 +1,15 @@
 package tadp.tp.argentinaexpress
 
-class Transporte (val serviciosExtra : Set[ServicioExtra])
+abstract class Transporte (val serviciosExtra : Set[ServicioExtra])
     extends CalculadorDistancia{
-  val volumenDeCarga : Int;
-  val costoPorKm : Int;
-  val velocidad : Int;
-  var sucursalDestino: Sucursal;
-  val enviosAsignados: Set[Envio];
-  val valorPeaje: Int;
-  var sucursalOrigen: Sucursal;
+  val volumenDeCarga : Int
+  val costoPorKm : Int
+  val velocidad : Int
+  var sucursalDestino: Sucursal = null
+  var enviosAsignados: Set[Envio] = Set()
+  val valorPeaje: Int
   
-  
+  //Esta repetido! volumenDisponible()
   def espacioDisponible():Int={
     this.volumenDeCarga - this.volumenEnvios
   }
@@ -30,18 +29,18 @@ class Transporte (val serviciosExtra : Set[ServicioExtra])
   }
   
   def volumenEnvios() :Int = {
-     var volumenOcupado:Int = 0;
-     this.enviosAsignados.foreach((e:Envio) =>volumenOcupado+= e.volumen)
-     volumenOcupado
+//     var volumenOcupado:Int = 0;
+//     this.enviosAsignados.foreach((e:Envio) =>volumenOcupado+= e.volumen)
+//     volumenOcupado
+     this.enviosAsignados.map((e:Envio) => e.volumen).sum
   }
   
   def volumenDisponible() :Int = {
     this.volumenDeCarga - this.volumenEnvios
   }
   
-  //Funcion utilizada para validar que un transporte pueda cargar un envio
   def puedeCargar(envio:Envio) : Boolean ={
-    var cargable : Boolean = coincideDestino(envio) && entraEnDestino(envio) && entraEnTransporte(envio) && entraEnAvion(envio);
+    var cargable : Boolean = coincideDestino(envio) && entraEnTransporte(envio) && entraEnAvion(envio);
     envio match {
   case envio :Fragil => cargable = cargable && puedeCargarFragiles
   case envio :Urgente => cargable = cargable && puedeCargarUrgentes
@@ -60,14 +59,13 @@ class Transporte (val serviciosExtra : Set[ServicioExtra])
   }
 
   def entraEnDestino(envio:Envio): Boolean ={
-    envio.sucursalDestino.volumenDisponible >= envio.volumen 
+    envio.sucursalDestino.volumenDisponible >= envio.volumen
   }
   
   def entraEnTransporte(envio:Envio) : Boolean ={
     this.volumenDisponible >= envio.volumen
   }
   
-  //Si el transporte cuyo envio esta siendo cargado es un avion, valida que la distancia sea mayor a 1000
   def entraEnAvion(envio : Envio) : Boolean ={
     if (this.esAvion){
       if (this.distanciaAereaEntre(envio.sucursalOrigen , envio.sucursalDestino ) > 1000)
@@ -78,7 +76,6 @@ class Transporte (val serviciosExtra : Set[ServicioExtra])
       true
   }
   
-  //Esto podria "objetizarse" en un metodo en la clase Avion. Por ahora lo dejo asi.
   def esAvion() : Boolean = {
     this match {
       case transporte: Avion => true
@@ -86,23 +83,21 @@ class Transporte (val serviciosExtra : Set[ServicioExtra])
     }
   }
   
-  //Calcula los costos de todos los envios
   def calcularCostoViaje() : Int = {
     var costoFinal : Int = 0
-    if (!this.sinEnviosAsignados) {
-    	costoFinal = this.costoTransporte
+    if (this.sinEnviosAsignados) 
+      0
+    else {
         this.enviosAsignados.foreach((e:Envio) => costoFinal += e.calcularCostoEnvio(this))
-        
       }
     costoFinal
   }
   
-  //Costo inicial. Luego sera modificado por otros factores
-  def costoTransporte() : Int = {
+  def costoTransporte(envio :Envio) : Int = {
     this match {
-      case transporte : Avion => this.costoPorKm * this.distanciaAereaEntre(this.sucursalOrigen , this.sucursalDestino ).toInt
-      case transporte : Camion => this.costoPorKm * this.distanciaTerrestreEntre(this.sucursalOrigen , this.sucursalDestino ).toInt
-      case transporte : Furgoneta => this.costoPorKm * this.distanciaTerrestreEntre(this.sucursalOrigen , this.sucursalDestino ).toInt
+      case transporte : Avion => this.costoPorKm * this.distanciaAereaEntre(envio.sucursalOrigen , envio.sucursalDestino ).toInt
+      case transporte : Camion => this.costoPorKm * this.distanciaTerrestreEntre(envio.sucursalOrigen , envio.sucursalDestino ).toInt
+      case transporte : Furgoneta => this.costoPorKm * this.distanciaTerrestreEntre(envio.sucursalOrigen , envio.sucursalDestino ).toInt
     }
   }
   
@@ -122,13 +117,9 @@ class Transporte (val serviciosExtra : Set[ServicioExtra])
   }
   
   def agregarEnvio(envio : Envio): Transporte = {
-    
-    if (this.sinEnviosAsignados) {
-      this.sucursalDestino = envio.sucursalDestino
-    }
-    
-    this.enviosAsignados.+(envio)
-    
+    this.enviosAsignados = this.enviosAsignados ++ Set(envio)
+    if (this.enviosAsignados.size == 1)
+    	this.sucursalDestino = envio.sucursalDestino
     this
   }
   
@@ -139,7 +130,7 @@ class Transporte (val serviciosExtra : Set[ServicioExtra])
   def tieneSeguimientoVideo(): Boolean = {
     !this.serviciosExtra.find((s: ServicioExtra) => s.soyVideo).isEmpty
   }
-  // Falta definir la mutua exclusion
+  
   def puedeLlevarAnimales() : Boolean = {
     !this.serviciosExtra.find((s: ServicioExtra) => s.soyInfraestructuraAnimales).isEmpty
   }
