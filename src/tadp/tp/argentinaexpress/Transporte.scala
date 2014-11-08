@@ -9,6 +9,7 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra])
   var enviosAsignados: Set[Envio] = Set()
   val valorPeaje: Int
   
+  
   //Esta repetido! volumenDisponible()
   def espacioDisponible():Int={
     this.volumenDeCarga - this.volumenEnvios
@@ -39,6 +40,7 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra])
     this.volumenDeCarga - this.volumenEnvios
   }
   
+  //Funcion utilizada para validar que un transporte pueda cargar un envio
   def puedeCargar(envio:Envio) : Boolean ={
     var cargable : Boolean = coincideDestino(envio) && entraEnTransporte(envio) && entraEnAvion(envio);
     envio match {
@@ -58,6 +60,7 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra])
     }
   }
 
+  //Si el transporte cuyo envio esta siendo cargado es un avion, valida que la distancia sea mayor a 1000
   def entraEnDestino(envio:Envio): Boolean ={
     envio.sucursalDestino.volumenDisponible >= envio.volumen
   }
@@ -67,27 +70,14 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra])
   }
   
   def entraEnAvion(envio : Envio) : Boolean ={
-    if (this.esAvion){
-      if (this.distanciaAereaEntre(envio.sucursalOrigen , envio.sucursalDestino ) > 1000)
-        true
-      else
-        false
-    }else
-      true
+    true
   }
   
-  def esAvion() : Boolean = {
-    this match {
-      case transporte: Avion => true
-      case _ => false
-    }
-  }
-  
+  //Calcula los costos de todos los envios
   def calcularCostoViaje() : Int = {
     var costoFinal : Int = 0
-    if (this.sinEnviosAsignados) 
-      0
-    else {
+    if (!this.sinEnviosAsignados) {
+    	costoFinal = this.costoTransporte(this.enviosAsignados.head)
         this.enviosAsignados.foreach((e:Envio) => costoFinal += e.calcularCostoEnvio(this))
       }
     costoFinal
@@ -100,8 +90,6 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra])
       case transporte : Furgoneta => this.costoPorKm * this.distanciaTerrestreEntre(envio.sucursalOrigen , envio.sucursalDestino ).toInt
     }
   }
-  
-
   
   def precioPeajes(envio:Envio):Int={
     (cantidadPeajesEntre(envio.sucursalOrigen,envio.sucursalDestino) * this.valorPeaje)
@@ -131,6 +119,7 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra])
     !this.serviciosExtra.find((s: ServicioExtra) => s.soyVideo).isEmpty
   }
   
+   // Falta definir la mutua exclusion
   def puedeLlevarAnimales() : Boolean = {
     !this.serviciosExtra.find((s: ServicioExtra) => s.soyInfraestructuraAnimales).isEmpty
   }

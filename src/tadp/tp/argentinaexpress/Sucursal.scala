@@ -1,6 +1,6 @@
 package tadp.tp.argentinaexpress
 
-class Sucursal (val transporte : Set[Transporte], val volumenTotal : Int, val Pais : String) extends CalculadorDistancia{
+class Sucursal (var transporte : Set[Transporte], val volumenTotal : Int, val Pais : String) extends CalculadorDistancia{
 
   var envios : Set[Envio] = Set();
   var volumen:Int = 0;
@@ -10,13 +10,17 @@ class Sucursal (val transporte : Set[Transporte], val volumenTotal : Int, val Pa
     (this.volumenTotal) - (this.volumenEnviosEnSucursal);
     }
   
+  def agregarTransporte(tran : Transporte) ={
+    this.transporte = this.transporte ++ Set(tran)
+  }
+  
   def volumenEnviosEnSucursal() : Int ={
 	this.transporte.map((t:Transporte) => t.volumenEnvios).sum
     //this.transporte.foreach((t:Transporte) => volumen+=t.volumenEnvios);
     //volumen;
   }
 
-   def volumenEnviosASucursal(destino : Sucursal) : Int ={
+  def volumenEnviosASucursal(destino : Sucursal) : Int ={
 	this.transporte.filter((t: Transporte)=> t.sucursalDestino == destino).map((t:Transporte) => t.volumenEnvios).sum
     //this.transporte.foreach((t:Transporte) => volumen+=t.volumenEnvios);
     //volumen;
@@ -28,7 +32,7 @@ class Sucursal (val transporte : Set[Transporte], val volumenTotal : Int, val Pa
     transporteAsignado = transporte.find((t: Transporte) => t.puedeCargar(envio))
     
     if (!transporteAsignado.isEmpty && entraPedido(envio)) 
-    	transporteAsignado.get.agregarEnvio(envio)
+    	transporteAsignado.foreach(_.agregarEnvio(envio))
     
     !transporteAsignado.isEmpty
   }
