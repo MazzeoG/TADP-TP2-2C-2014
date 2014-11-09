@@ -1,9 +1,9 @@
 package tadp.tp.argentinaexpress
 
-class Sucursal (var transporte : Set[Transporte], val volumenTotal : Int, val Pais : String) extends CalculadorDistancia{
+class Sucursal (var transporte : Set[Transporte], val volumenTotal : Int, val pais : String) extends CalculadorDistancia{
 
-  var envios : Set[Envio] = Set();
-  var volumen:Int = 0;
+  var envios : Set[Envio] = Set()
+  var volumen:Int = 0
    
   
   def volumenDisponible():Int={
