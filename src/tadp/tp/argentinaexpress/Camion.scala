@@ -3,10 +3,10 @@ package tadp.tp.argentinaexpress
 class Camion (override val serviciosExtra : Set[ServicioExtra])
 extends Transporte (serviciosExtra){
   
-  override val volumenDeCarga : Int = 45;
-  override val costoPorKm : Int = 100;
-  override val velocidad : Int = 60;
-  override val valorPeaje : Int = 12;
+  override val volumenDeCarga : Int = 45
+  override val costoPorKm : Int = 100
+  override val velocidad : Int = 60
+  override val valorPeaje : Int = 12
 
   override def puedeCargarRefrigerados() ={
     true

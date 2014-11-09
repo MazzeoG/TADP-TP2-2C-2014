@@ -1,9 +1,13 @@
 package tadp.tp.argentinaexpress
 
+<<<<<<< HEAD
 import java.text.SimpleDateFormat
 import java.util.{Calendar, Date}
 
 class Envio (val caracteristicas : Set[Envio],
+=======
+class Envio (val caracteristicas : Set[ServicioExtra],
+>>>>>>> origin/master
     val sucursalOrigen :Sucursal,
     val sucursalDestino :Sucursal,
     val volumen :Int,
