@@ -42,7 +42,7 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra])
   
   //Funcion utilizada para validar que un transporte pueda cargar un envio
   def puedeCargar(envio:Envio) : Boolean ={
-    var cargable : Boolean = coincideDestino(envio) && entraEnTransporte(envio) && entraEnAvion(envio);
+    var cargable : Boolean = coincideDestino(envio) && entraEnTransporte(envio) && entraEnAvion(envio) && infraestructuraNecesaria(envio)
     envio match {
   case envio :Fragil => cargable = cargable && puedeCargarFragiles
   case envio :Urgente => cargable = cargable && puedeCargarUrgentes
@@ -73,6 +73,9 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra])
     true
   }
   
+  def infraestructuraNecesaria(envio: Envio) : Boolean ={
+    envio.caracteristicas.forall(carac => this.serviciosExtra.contains(carac)) 
+  }
   //Calcula los costos de todos los envios
   def calcularCostoViaje() : Int = {
     var costoFinal : Int = 0

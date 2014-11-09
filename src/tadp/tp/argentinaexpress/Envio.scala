@@ -1,6 +1,6 @@
 package tadp.tp.argentinaexpress
 
-class Envio (val caracteristicas : Set[Envio],
+class Envio (val caracteristicas : Set[ServicioExtra],
     val sucursalOrigen :Sucursal,
     val sucursalDestino :Sucursal,
     val volumen :Int,
