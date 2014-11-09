@@ -11,5 +11,9 @@ extends Transporte (serviciosExtra){
   override def entraEnAvion(envio : Envio) : Boolean ={
     this.distanciaAereaEntre(envio.sucursalOrigen , envio.sucursalDestino ) > 1000
   }
+  
+  override def impuestoAvion() : Double = {
+    0.1
+  }
 
 }

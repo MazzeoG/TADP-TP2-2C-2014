@@ -8,4 +8,5 @@ class Refrigeracion (override val caracteristicas : Set[Envio],
 extends Envio (caracteristicas, sucursalOrigen, sucursalDestino, volumen, fecha){
 	override def precio()={210}
 	def costoBase()={70}
+	override val valorRefrigeracion : Int = 5;
 }

@@ -74,11 +74,11 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra])
   }
   
   //Calcula los costos de todos los envios
-  def calcularCostoViaje() : Int = {
-    var costoFinal : Int = 0
+  def calcularCostoViaje() : Double = {
+    var costoFinal : Double = 0
     if (!this.sinEnviosAsignados) {
-    	costoFinal = this.costoTransporte(this.enviosAsignados.head)
-        this.enviosAsignados.foreach((e:Envio) => costoFinal += e.calcularCostoEnvio(this))
+    	var costoDeTransporte : Double = this.costoTransporte(this.enviosAsignados.head)
+        this.enviosAsignados.foreach((e:Envio) => costoFinal += e.calcularCostoEnvio(this, costoDeTransporte))
       }
     costoFinal
   }
@@ -128,4 +128,7 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra])
     !this.serviciosExtra.find((s: ServicioExtra) => s.soyInfraestructuraSustancias).isEmpty
   }
   
+  def impuestoAvion() : Double = {
+    1
+  }
 }

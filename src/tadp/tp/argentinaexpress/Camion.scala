@@ -12,12 +12,14 @@ extends Transporte (serviciosExtra){
     true
   } //tienen refrigeracion
   
-  def costo(envio:Envio){
+ /* def costo(envio:Envio){
     envio match {
       case envio: Refrigeracion => (precioPeajes(envio)+ 5)*multiplicador
       case _ => (precioPeajes(envio))*multiplicador
     }
   }
+  * 
+  */
   
   override def multiplicador():Int= {
    if( (this.volumenDeCarga/5 >= this.volumenEnvios)){      //falta poner si suc destino u origen es casa central
