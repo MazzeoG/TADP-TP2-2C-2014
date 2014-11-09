@@ -1,13 +1,13 @@
 package tadp.tp.argentinaexpress
 
-<<<<<<< HEAD
+
 import java.text.SimpleDateFormat
 import java.util.{Calendar, Date}
 
-class Envio (val caracteristicas : Set[Envio],
-=======
+
+
 class Envio (val caracteristicas : Set[ServicioExtra],
->>>>>>> origin/master
+
     val sucursalOrigen :Sucursal,
     val sucursalDestino :Sucursal,
     val volumen :Int,
@@ -25,7 +25,7 @@ class Envio (val caracteristicas : Set[ServicioExtra],
 	  //Los vehiculos terrestres se ven afectados por peajes, donde los camiones pagan $12 por cada peaje y las furgonetas pagan $6.
 	  //Dentro de los vehiculos terrestres, los paquetes que necesiten refrigeracion suman al costo $5 por cada uno.
 	  
-	  var costoParcial1 : Double = (costoDeTransporte + transporte.precioPeajes(this)+ valorRefrigeracion)* transporte.multiplicador
+	  var costoParcial1 : Double = (costoDeTransporte + transporte.precioPeajes(this)+ valorRefrigeracion)
 	  
 	  // Los aviones que no se ven afectados por peajes pero pagan 10% de impuestos cuando se desplazan entre sucursales de distintos paises.
 	  
