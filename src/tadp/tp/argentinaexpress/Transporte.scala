@@ -98,13 +98,17 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra])
     (cantidadPeajesEntre(envio.sucursalOrigen,envio.sucursalDestino) * this.valorPeaje)
   }
   
-  def multiplicador():Int= {
-	if( (this.volumenDeCarga/5 >= this.volumenEnvios)){      //falta poner si suc destino u origen es casa central
-     1+(this.volumenEnvios/this.volumenDeCarga)
+  def multiplicador(envio: Envio):Int= {
+	if( (this.volumenDeCarga/5 >= this.volumenEnvios)){
+     1
    }
    else {
      1
-    }
+   }
+  }
+  
+  def esCamion(): Boolean = {
+    false
   }
   
   def agregarEnvio(envio : Envio): Transporte = {
@@ -112,6 +116,10 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra])
     if (this.enviosAsignados.size == 1)
     	this.sucursalDestino = envio.sucursalDestino
     this
+  }
+  
+  def distanciaEntreSucursales(sucursal1 :Sucursal, sucursal2 :Sucursal) :Double = {
+    this.distanciaTerrestreEntre(sucursal1, sucursal2)
   }
   
   def tieneSeguimientoGPS(): Boolean = {

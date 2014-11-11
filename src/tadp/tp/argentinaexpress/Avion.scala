@@ -15,5 +15,18 @@ extends Transporte (serviciosExtra){
   override def impuestoAvion() : Double = {
     0.1
   }
+  
+  override def multiplicador(envio: Envio):Int= {
+   if (this.volumenDeCarga/5 >= this.volumenEnvios){      
+     3
+   }
+   else {
+     1
+   }
+  }
+  
+  override def distanciaEntreSucursales(sucursal1 :Sucursal, sucursal2 :Sucursal) :Double = {
+    this.distanciaAereaEntre(sucursal1, sucursal2)
+  }
 
 }

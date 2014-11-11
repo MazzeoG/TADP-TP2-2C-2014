@@ -8,24 +8,21 @@ extends Transporte (serviciosExtra) {
   override val valorPeaje : Int = 6
 
 
-  def costo(envio:Envio){
-    var costoFinal = 
-    envio match {
-      case envio: Fragil => (precioPeajes(envio)+ 5)*multiplicador
-      case _ => (precioPeajes(envio))*multiplicador
-    }
-   }
- override def multiplicador():Int= {
-   if( (this.volumenDeCarga/5 >= this.volumenEnvios)){      //falta poner si lleva 3 urgentes
+ override def multiplicador(envio: Envio):Int= {
+   if( (this.volumenDeCarga/5 >= this.volumenEnvios) && (this.tiene3oMasPaquetesUrgentes)){      //falta poner si lleva 3 urgentes
      2
    }
    else {
      1
    }
  }
-  override def precioPeajes(envio:Envio):Int={
-    (cantidadPeajesEntre(envio.sucursalOrigen,envio.sucursalDestino)*6)
-  }
   
+ override def precioPeajes(envio:Envio):Int={
+    (cantidadPeajesEntre(envio.sucursalOrigen,envio.sucursalDestino)*6)
+ }
+ 
+ def tiene3oMasPaquetesUrgentes(): Boolean = {
+   this.enviosAsignados.count((e: Envio) => e.esUrgente()) >= 3
+ }
   
 }

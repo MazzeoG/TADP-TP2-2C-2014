@@ -12,17 +12,12 @@ extends Transporte (serviciosExtra){
     true
   } //tienen refrigeracion
   
- /* def costo(envio:Envio){
-    envio match {
-      case envio: Refrigeracion => (precioPeajes(envio)+ 5)*multiplicador
-      case _ => (precioPeajes(envio))*multiplicador
-    }
+  override def esCamion(): Boolean = {
+    true
   }
-  * 
-  */
   
-  override def multiplicador():Int= {
-   if( (this.volumenDeCarga/5 >= this.volumenEnvios)){      //falta poner si suc destino u origen es casa central
+  override def multiplicador(envio: Envio):Int= {
+   if( (this.volumenDeCarga/5 >= this.volumenEnvios) && !envio.sucursalOrigen.esCasaCentral && !envio.sucursalDestino.esCasaCentral){      
      1+(this.volumenEnvios/this.volumenDeCarga)
    }
    else {
