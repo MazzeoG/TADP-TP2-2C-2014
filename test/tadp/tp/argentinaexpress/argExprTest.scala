@@ -2,6 +2,10 @@ package tadp.tp.argentinaexpress
 import org.junit.Test
 import org.junit.Assert._
 
+import java.text.SimpleDateFormat
+
+import java.util.{Calendar, Date}
+
 class TransporteTest {
   
 /*  Copy Paste Cheatsheet
@@ -27,8 +31,10 @@ class TransporteTest {
     val sucursalArg = new Sucursal(Set(camion1),1000,"Argentina")   
     val sucursalChi = new Sucursal(Set(),500,"Chile")
     
-    var unEnvioGrande = new Normal(Set(),sucursalArg,sucursalChi,100,(7,11,2014))
-    var unEnvioChico = new Normal(Set(),sucursalArg,sucursalChi,10,(7,11,2014))
+
+    
+    var unEnvioGrande = new Normal(Set(),sucursalArg,sucursalChi,100,new Date(7,11,2014))
+    var unEnvioChico = new Normal(Set(),sucursalArg,sucursalChi,10,new Date(7,11,2014))
    
     assertEquals(true, camion1.puedeCargar(unEnvioChico))
     assertEquals(false, camion1.puedeCargar(unEnvioGrande))    
@@ -40,7 +46,7 @@ class TransporteTest {
     val sucursalArg = new Sucursal(Set(camion1),1000,"Argentina")   
     val sucursalChi = new Sucursal(Set(),500,"Chile")
     
-    var unEnvioChico = new Normal(Set(),sucursalArg,sucursalChi,10,(7,11,2014))
+    var unEnvioChico = new Normal(Set(),sucursalArg,sucursalChi,10,new Date(7,11,2014))
    
     sucursalArg.asignarEnvioATransporte(unEnvioChico)
     assertEquals(true,camion1.enviosAsignados.contains(unEnvioChico))	  
@@ -52,9 +58,9 @@ class TransporteTest {
     val sucursalArg = new Sucursal(Set(camion1),1000,"Argentina")   
     val sucursalChi = new Sucursal(Set(),500,"Chile")
     
-    var unEnvioNormal = new Normal(Set(),sucursalArg,sucursalChi,10,(7,11,2014))
-    var otroEnvioNormal = new Normal(Set(),sucursalArg,sucursalChi,10,(7,11,2014))
-    var unEnvioUrgente = new Urgente(Set(),sucursalArg,sucursalChi,10,(7,11,2014))
+    var unEnvioNormal = new Normal(Set(),sucursalArg,sucursalChi,10,new Date(7,11,2014))
+    var otroEnvioNormal = new Normal(Set(),sucursalArg,sucursalChi,10,new Date(7,11,2014))
+    var unEnvioUrgente = new Urgente(Set(),sucursalArg,sucursalChi,10,new Date(7,11,2014))
     
     sucursalArg.asignarEnvioATransporte(unEnvioNormal)
     sucursalArg.asignarEnvioATransporte(otroEnvioNormal)
@@ -72,8 +78,8 @@ class TransporteTest {
     val sucursalChi = new Sucursal(Set(),500,"Chile")
     val laCasaCentral = new CasaCentral(Set(),1500,"EEUU")
     
-    var unEnvioNormal = new Normal(Set(),sucursalArg,sucursalChi,10,(7,11,2014))
-    var otroEnvioNormal = new Normal(Set(),sucursalArg,laCasaCentral,10,(7,11,2014))
+    var unEnvioNormal = new Normal(Set(),sucursalArg,sucursalChi,10,new Date(7,11,2014))
+    var otroEnvioNormal = new Normal(Set(),sucursalArg,laCasaCentral,10,new Date(7,11,2014))
     
     sucursalArg.asignarEnvioATransporte(unEnvioNormal)
     sucursalArg.asignarEnvioATransporte(otroEnvioNormal)
@@ -88,8 +94,8 @@ class TransporteTest {
     val sucursalArg = new Sucursal(Set(camion1),1000,"Argentina")   
     val sucursalChi = new Sucursal(Set(),30,"Chile")
     
-    var unEnvioNormal = new Normal(Set(),sucursalArg,sucursalChi,10,(7,11,2014))
-    var otroEnvioNormal = new Normal(Set(),sucursalArg,sucursalChi,25,(7,11,2014))
+    var unEnvioNormal = new Normal(Set(),sucursalArg,sucursalChi,10,new Date(7,11,2014))
+    var otroEnvioNormal = new Normal(Set(),sucursalArg,sucursalChi,25,new Date(7,11,2014))
     
     sucursalArg.asignarEnvioATransporte(unEnvioNormal)
     sucursalArg.asignarEnvioATransporte(otroEnvioNormal)
@@ -105,8 +111,8 @@ class TransporteTest {
     val sucursalArg2 = new Sucursal(Set(),1000,"Argentina")
     val sucursalChi = new Sucursal(Set(),500,"Chile")
     
-    var unEnvioNormal = new Normal(Set(),sucursalArg,sucursalChi,10,(7,11,2014))
-    var otroEnvioNormal = new Normal(Set(),sucursalArg,sucursalArg2,10,(7,11,2014))
+    var unEnvioNormal = new Normal(Set(),sucursalArg,sucursalChi,10,new Date(7,11,2014))
+    var otroEnvioNormal = new Normal(Set(),sucursalArg,sucursalArg2,10,new Date(7,11,2014))
   
     sucursalArg.asignarEnvioATransporte(otroEnvioNormal)
     sucursalArg.asignarEnvioATransporte(unEnvioNormal)
@@ -125,8 +131,8 @@ class TransporteTest {
     val sucursalArg = new Sucursal(Set(camion1),1000,"Argentina")   
     val sucursalArg2 = new Sucursal(Set(camion2),1000,"Argentina")
     
-    var unEnvioAnimal = new Normal(Set(infraAnimales),sucursalArg,sucursalArg2,10,(7,11,2014))
-    var otroEnvioAnimal = new Normal(Set(infraAnimales),sucursalArg2,sucursalArg,10,(7,11,2014))
+    var unEnvioAnimal = new Normal(Set(infraAnimales),sucursalArg,sucursalArg2,10,new Date(7,11,2014))
+    var otroEnvioAnimal = new Normal(Set(infraAnimales),sucursalArg2,sucursalArg,10,new Date(7,11,2014))
     
     sucursalArg.asignarEnvioATransporte(unEnvioAnimal)
     sucursalArg2.asignarEnvioATransporte(otroEnvioAnimal)
@@ -144,8 +150,8 @@ class TransporteTest {
     val sucursalArg = new Sucursal(Set(camion1),1000,"Argentina")   
     val sucursalArg2 = new Sucursal(Set(camion2),1000,"Argentina")
     
-    var unEnvioPeligroso = new Normal(Set(infraSustancias),sucursalArg,sucursalArg2,10,(7,11,2014))
-    var otroEnvioPeligroso = new Normal(Set(infraSustancias),sucursalArg2,sucursalArg,10,(7,11,2014))
+    var unEnvioPeligroso = new Normal(Set(infraSustancias),sucursalArg,sucursalArg2,10,new Date(7,11,2014))
+    var otroEnvioPeligroso = new Normal(Set(infraSustancias),sucursalArg2,sucursalArg,10,new Date(7,11,2014))
     
     sucursalArg.asignarEnvioATransporte(unEnvioPeligroso)
     sucursalArg2.asignarEnvioATransporte(otroEnvioPeligroso)

@@ -40,4 +40,8 @@ class Sucursal (var transporte : Set[Transporte], val volumenTotal : Int, val pa
   def entraPedido(envio:Envio): Boolean = { 
     envio.sucursalDestino.volumenDisponible >= (envio.volumen + this.volumenEnviosASucursal(envio.sucursalDestino))
   }
+  
+  def esCasaCentral(): Boolean = {
+    false
+  }
 }
