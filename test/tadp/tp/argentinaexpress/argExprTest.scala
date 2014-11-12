@@ -100,7 +100,7 @@ class TransporteTest {
     sucursalArg.asignarEnvioATransporte(unEnvioNormal)
     sucursalArg.asignarEnvioATransporte(otroEnvioNormal)
     assertEquals(true,camion1.enviosAsignados.contains(unEnvioNormal))
-    assertEquals(false,camion1.enviosAsignados.contains(otroEnvioNormal))    
+    assertEquals(false,camion1.enviosAsignados.contains(otroEnvioNormal))
   }   
 
    
