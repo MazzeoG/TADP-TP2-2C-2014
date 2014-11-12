@@ -11,5 +11,5 @@ class Normal (override val caracteristicas : Set[ServicioExtra],
     override val fecha :Date)
 extends Envio (caracteristicas, sucursalOrigen, sucursalDestino, volumen, fecha){
 	override def precio()={80}
-	def costoBase()={10}
+	override def costoBase()={10}
 }

@@ -11,5 +11,5 @@ class Fragil (override val caracteristicas : Set[ServicioExtra],
     override val fecha :Date)
 extends Envio (caracteristicas, sucursalOrigen, sucursalDestino, volumen, fecha){
   override def precio()={120}
-  def costoBase()={18}
+  override def costoBase()={18}
 }

@@ -1,7 +1,7 @@
 package tadp.tp.argentinaexpress
 
-class Avion (override val serviciosExtra : Set[ServicioExtra])
-extends Transporte (serviciosExtra){
+class Avion (override val serviciosExtra : Set[ServicioExtra], sucursalOrigen: Sucursal)
+extends Aereo (serviciosExtra, sucursalOrigen){
   
   override val volumenDeCarga : Int = 200
   override val costoPorKm : Int = 500
@@ -16,17 +16,14 @@ extends Transporte (serviciosExtra){
     0.1
   }
   
-  override def multiplicador(envio: Envio):Int= {
-   if (this.volumenDeCarga/5 >= this.volumenEnvios){      
-     3
-   }
-   else {
-     1
-   }
-  }
-  
-  override def distanciaEntreSucursales(sucursal1 :Sucursal, sucursal2 :Sucursal) :Double = {
-    this.distanciaAereaEntre(sucursal1, sucursal2)
+  override def multiplicador():Double ={
+	if( (this.volumenDeCarga*volOcupadoMulti >= this.volumenEnvios)) 
+	 3
+   else
+     1  
   }
 
+  override def reduccionInsumos(costoDeTransporte: Double): Double = {
+    costoDeTransporte * 0.2
+  }
 }

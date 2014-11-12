@@ -16,8 +16,8 @@ trait CalculadorDistancia {
 	
 	def cantidadPeajesEntre(sucursal1: Sucursal, sucursal2: Sucursal): Int = {
 	  if (sucursal1.pais == sucursal2.pais) 
-		2
+		0
 	  else
-	    10
+	    5
 	}
 }
