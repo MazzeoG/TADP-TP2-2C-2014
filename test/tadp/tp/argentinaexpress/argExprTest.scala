@@ -177,6 +177,31 @@ class TransporteTest {
     assertEquals(Set(),camion1.enviosAsignados)
     assertEquals(null,camion1.sucursalDestino)
   }
+  
+  @Test
+  def `un envio es retirado de la Sucursal` = {
+    
+    val sucursalArg = new Sucursal(Set(),1000,"Argentina")   
+    val sucursalChi = new Sucursal(Set(),500,"Chile")
+    val camion1 = new Camion(Set(), sucursalArg)
+    
+    var unEnvioChico = new Normal(Set(),sucursalArg,sucursalChi,10,new Date(7,11,2014))
+   
+    sucursalArg.asignarEnvioATransporte(unEnvioChico)
+    assertEquals(true,camion1.enviosAsignados.contains(unEnvioChico))
+    assertEquals(false,sucursalChi.envios.contains(unEnvioChico))
+    
+    sucursalArg.mandarTransporte(camion1)
+    assertEquals(false,camion1.enviosAsignados.contains(unEnvioChico))
+    assertEquals(true,sucursalChi.envios.contains(unEnvioChico))
+    assertEquals(Set(),camion1.enviosAsignados)
+    assertEquals(null,camion1.sucursalDestino)
+    
+    sucursalChi.retirarEnvio(unEnvioChico)
+    
+    assertEquals(false,sucursalChi.envios.contains(unEnvioChico))
+    
+  }
 
 
 }
