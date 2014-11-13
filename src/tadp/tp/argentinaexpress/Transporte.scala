@@ -250,6 +250,11 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra], var sucursal
   def reduccionInsumos(costoDeTransporte: Double): Double = {
     0
   }
+  
+  def regresarASucursal() ={
+   sucursalOrigen.agregarTransporte(this) 
+   sucursalDestino = null
+  }
 }
 
 

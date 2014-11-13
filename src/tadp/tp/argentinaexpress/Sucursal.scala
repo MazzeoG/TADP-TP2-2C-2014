@@ -11,19 +11,20 @@ class Sucursal (var transporte : Set[Transporte], val volumenTotal : Int, val pa
     }
   
   def agregarTransporte(tran : Transporte) ={
-    this.transporte = this.transporte ++ Set(tran)
+    //this.transporte = this.transporte ++ Set(tran)
+    this.transporte += tran
+  }
+  
+  def quitarTransporte(tran : Transporte) ={
+    this.transporte -= tran
   }
   
   def volumenEnviosEnSucursal() : Int ={
 	(this.transporte.map((t:Transporte) => t.volumenEnvios).sum) + (this.envios.map((e:Envio) => e.volumen).sum)
-    //this.transporte.foreach((t:Transporte) => volumen+=t.volumenEnvios);
-    //volumen;
   }
 
   def volumenEnviosASucursal(destino : Sucursal) : Int ={
 	this.transporte.filter((t: Transporte)=> t.sucursalDestino == destino).map((t:Transporte) => t.volumenEnvios).sum
-    //this.transporte.foreach((t:Transporte) => volumen+=t.volumenEnvios);
-    //volumen;
   } 
   
   def asignarEnvioATransporte(envio: Envio): Option[Transporte] = {
@@ -52,22 +53,28 @@ class Sucursal (var transporte : Set[Transporte], val volumenTotal : Int, val pa
   //c) El transporte llega nuevamente a la sucursal origen.
   //Se considera que los transportes solo llevan envios en su camino de ida, es decir, vuelven vacios.
   
-  def mandarEnvio(envio: Envio) = {
-    var transporteAsignado: Option[Transporte] = this.asignarEnvioATransporte(envio)
-    
-    if (!transporteAsignado.isEmpty){
-      this.transporte -- transporteAsignado
-      envio.sucursalDestino.recibirEnvio(envio,transporteAsignado)
-    }
+  def mandarTransporte(tran : Transporte) = {
+	  //El transporte esta en la sucursal y tiene pedidos para enviar?
+	  if (transporte.contains(tran) && (tran.sucursalDestino != null) && (tran.sucursalOrigen != null) && (!tran.enviosAsignados.isEmpty)) {
+	    quitarTransporte(tran)
+	    tran.sucursalDestino.recibirEnvio(Some(tran))
+	  }
+
+//    if (!transporteAsignado.isEmpty){
+//      this.transporte -- transporteAsignado
+//      envio.sucursalDestino.recibirEnvio(envio,transporteAsignado)
+ //   }
   }
   
-  def recibirEnvio(envio:Envio, transporteAsignado:Option[Transporte]) = {
-    
-    transporteAsignado.foreach(_.enviosAsignados -- Set(envio))
-    this.envios ++ Set(envio)
-    
-    envio.sucursalOrigen.regresoTransporte(transporteAsignado)
+  def recibirEnvio(tran: Option[Transporte]) = {
+    tran.foreach({t: Transporte =>
+      t.enviosAsignados.foreach(this.envios += _ ) // Pasamos los pedidos a la sucursal
+      t.enviosAsignados = Set() // Vaciamos los pedidos del transporte
+      t.regresarASucursal // Retorna a la sucursal de origen
+    })
+      
   }
+
   
   def regresoTransporte(transporteAsignado: Option[Transporte]) = {
     this.transporte ++ transporteAsignado
