@@ -17,10 +17,13 @@ extends Aereo (serviciosExtra, sucursalOrigen){
   }
   
   override def multiplicador():Double ={
-	if( (this.volumenDeCarga*volOcupadoMulti >= this.volumenEnvios)) 
-	 3
-   else
-     1  
+    var volumenMultiplicador=this.volumenDeCarga*volOcupadoMulti;
+    (volumenMultiplicador >= this.volumenEnvios) match
+	  {
+	  	case true =>  3
+	  	case false => 1 
+	  }
+	
   }
 
   override def reduccionInsumos(costoDeTransporte: Double): Double = {

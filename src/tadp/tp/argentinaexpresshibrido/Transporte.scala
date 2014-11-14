@@ -194,11 +194,11 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra], var sucursal
     var cal: Calendar = Calendar.getInstance()
 	cal.setTime(fechaEnvio)
 	
-	if (!(cal.get(Calendar.MONTH) == 1)){
-	  cal.get(Calendar.WEEK_OF_MONTH) == 5
-	} else {
-	  cal.get(Calendar.WEEK_OF_MONTH) == 4
-	}  
+      (cal.get(Calendar.MONTH)) match
+	  {
+	  	case 1 => cal.get(Calendar.WEEK_OF_MONTH) == 4
+	  	case _ => cal.get(Calendar.WEEK_OF_MONTH) == 5
+	  }
   }
 	
   def pasadoElDia20(): Boolean = {
@@ -212,17 +212,18 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra], var sucursal
   }
   
   def costoGPS(): Double ={
-    if(serviciosExtra.exists(_.soyGPS))
-      distanciaEntreSucursales()*2*0.5
-    else
-      0
+    serviciosExtra.exists(_.soyGPS) match{
+      case true => distanciaEntreSucursales()*2*0.5
+      case _ => 0
+    }
+    
   }
   
   def costoVideo(): Double ={
-    if(serviciosExtra.exists(_.soyVideo))
-      distanciaEntreSucursales()*2*3.74
-    else
-      0
+    serviciosExtra.exists(_.soyVideo) match{
+      case true => distanciaEntreSucursales()*2*3.74
+      case _ => 0
+    }
   }  
 
   def distanciaEntreSucursales(): Double ={
