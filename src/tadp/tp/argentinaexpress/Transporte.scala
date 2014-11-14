@@ -53,14 +53,8 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra], var sucursal
   
   //Funcion utilizada para validar que un transporte pueda cargar un envio
   def puedeCargar(envio:Envio) : Boolean ={
-    var cargable : Boolean = coincideDestino(envio) && entraEnTransporte(envio) && entraEnAvion(envio) && infraestructuraNecesaria(envio) && coincideTipoDeEnvio(envio)
-    envio match {
-  case envio :Fragil => cargable = cargable && puedeCargarFragiles
-  case envio :Urgente => cargable = cargable && puedeCargarUrgentes
-  case envio :Refrigeracion => cargable = cargable && puedeCargarRefrigerados
-  case _ =>
-    }
-    cargable
+    coincideDestino(envio) && entraEnTransporte(envio) && entraEnAvion(envio) &&
+    infraestructuraNecesaria(envio) && coincideTipoDeEnvio(envio) && envio.esCargablePor(this)
   }
   
   def coincideDestino(envio:Envio) : Boolean = {
@@ -145,11 +139,9 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra], var sucursal
   }
   
   def costoTransporte(sucursalOrigen: Sucursal, sucursalDestino: Sucursal) : Double = {
-    this match {
-      case transporte : Avion => this.costoPorKm * this.distanciaAereaEntre(sucursalOrigen , sucursalDestino)
-      case transporte : Camion => this.costoPorKm * this.distanciaTerrestreEntre(sucursalOrigen , sucursalDestino)
-      case transporte : Furgoneta => this.costoPorKm * this.distanciaTerrestreEntre(sucursalOrigen , sucursalDestino)
-    }
+    
+    this.costoPorKm * this.distanciaEntreSucursales()
+   
   }
   
   def precioPeajes():Int={

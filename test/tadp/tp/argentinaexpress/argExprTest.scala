@@ -282,14 +282,14 @@ class TransporteTest {
     			 avion1.calcularCostoViaje, //actual
     			 0.01) //Delta    
   }  
-/*  
+ 
   @Test
   def `un camion a CC en la ultima semana` = {
     val sucursalArg = new Sucursal(Set(),1000,"Argentina")   
     val casaCentral = new CasaCentral(Set(),500,"Chile")
     val camion1 = new Camion(Set(), sucursalArg)
     
-    var unEnvio = new Normal(Set(),sucursalArg,casaCentral,10,new Date(30,11,2014))
+    var unEnvio = new Normal(Set(),sucursalArg,casaCentral,10,new Date(2014,11,30)) //Año,Mes,Dia
     
     sucursalArg.asignarEnvioATransporte(unEnvio)
     val asd = camion1.ultimaSemanaDelMes
@@ -305,9 +305,25 @@ class TransporteTest {
   
   @Test
   def `los aviones a CC pasado el 20 de mes` = {
+    val sucursalArg = new Sucursal(Set(),1000,"Argentina")   
+    val casaCentral = new CasaCentral(Set(),500,"Chile")
+    val avion1 = new Avion(Set(), sucursalArg)
+    
+    var unEnvio = new Normal(Set(),sucursalArg,casaCentral,100,new Date(2014,11,21)) //Año,Mes,Dia
+    
+    sucursalArg.asignarEnvioATransporte(unEnvio)
+    
+    // CostoTransporte = $500/km x 1500 km = $750000
+    // CostoBase = $10
+    // Impuestos = $750000 * 0.1 = $75000
+    // Reduccion Insumos = $750000 * (-0.2) = -$150000
+    // No hay mas modificadores
+    assertEquals(675010, //expected
+    			 avion1.calcularCostoViaje(),
+    			 0.01) //Delta    
     
   }  
- */ 
+ 
   @Test
   def `los transportes con menos del 20% del volumen afectan el costo` = {
     val sucursalArg = new Sucursal(Set(),1000,"Argentina")   
