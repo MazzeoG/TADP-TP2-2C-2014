@@ -1,5 +1,5 @@
 package tadp.tp.argentinaexpresshibrido
 
-class GPS {
+case class GPS(){
 
 }

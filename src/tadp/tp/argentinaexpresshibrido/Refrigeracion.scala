@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat
 
 import java.util.{Calendar, Date}
 
-class Refrigeracion (override val caracteristicas : Set[ServicioExtra],
+case class Refrigeracion (override val caracteristicas : Set[ServicioExtra],
     override val sucursalOrigen :Sucursal,
     override val sucursalDestino :Sucursal,
     override val volumen :Int,

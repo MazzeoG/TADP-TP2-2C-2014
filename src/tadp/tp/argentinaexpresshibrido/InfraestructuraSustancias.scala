@@ -1,6 +1,6 @@
 package tadp.tp.argentinaexpresshibrido
 
-class InfraestructuraSustancias extends ServicioExtra{
+case class InfraestructuraSustancias () extends ServicioExtra{
   
   override def soyInfraestructuraSustancias() : Boolean = {
     true
