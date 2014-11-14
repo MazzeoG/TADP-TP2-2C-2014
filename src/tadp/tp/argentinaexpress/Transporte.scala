@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat
 import java.util.{Calendar, Date}
 
 abstract class Transporte (val serviciosExtra : Set[ServicioExtra], var sucursalOrigen: Sucursal)
-    extends CalculadorDistancia{
+    extends CalculadorDistancia with Estadisticas{
   val volumenDeCarga : Int
   val costoPorKm : Int
   val velocidad : Int
@@ -12,7 +12,9 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra], var sucursal
   var enviosAsignados: Set[Envio] = Set()
   var fechaEnvio :Date = null
   val valorPeaje: Int
-  val volOcupadoMulti: Double = 0.2 
+  val volOcupadoMulti: Double = 0.2
+  var viajesRealizados : Set[Viaje] = Set()
+  
   // Inicializacion de los transportes
   if (sucursalOrigen != null)
 	  sucursalOrigen.agregarTransporte(this)
@@ -51,7 +53,7 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra], var sucursal
   
   //Funcion utilizada para validar que un transporte pueda cargar un envio
   def puedeCargar(envio:Envio) : Boolean ={
-    var cargable : Boolean = coincideDestino(envio) && entraEnTransporte(envio) && entraEnAvion(envio) && infraestructuraNecesaria(envio)
+    var cargable : Boolean = coincideDestino(envio) && entraEnTransporte(envio) && entraEnAvion(envio) && infraestructuraNecesaria(envio) && coincideTipoDeEnvio(envio)
     envio match {
   case envio :Fragil => cargable = cargable && puedeCargarFragiles
   case envio :Urgente => cargable = cargable && puedeCargarUrgentes
@@ -69,6 +71,11 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra], var sucursal
     }
   }
 
+  def coincideTipoDeEnvio(envio: Envio) : Boolean ={
+    var clase = envio.getClass()
+    enviosAsignados.forall(_.getClass() == clase)
+  }
+  
   //Si el transporte cuyo envio esta siendo cargado es un avion, valida que la distancia sea mayor a 1000
   def entraEnDestino(envio:Envio): Boolean ={
     envio.sucursalDestino.volumenDisponible >= envio.volumen
@@ -254,6 +261,18 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra], var sucursal
   def regresarASucursal() ={
    sucursalOrigen.agregarTransporte(this) 
    sucursalDestino = null
+  }
+  
+  def calcularGananciaBruta() : Double = {
+    enviosAsignados.map(_.precio).sum
+  }
+  
+  def calcularGananciaNeta() : Double = {
+    calcularGananciaBruta - calcularCostoViaje
+  }  
+  
+  def calcularTiempoViaje() : Double = {
+    distanciaEntreSucursales / velocidad
   }
 }
 

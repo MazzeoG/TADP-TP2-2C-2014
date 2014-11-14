@@ -1,10 +1,10 @@
 package tadp.tp.argentinaexpress
 
-class Sucursal (var transporte : Set[Transporte], val volumenTotal : Int, val pais : String) extends CalculadorDistancia{
+class Sucursal (var transporte : Set[Transporte], val volumenTotal : Int, val pais : String) extends CalculadorDistancia with Estadisticas{
 
   var envios : Set[Envio] = Set()
   var volumen:Int = 0
-   
+  var viajesRealizados : Set[Viaje] = Set() 
   
   def volumenDisponible():Int={
     (this.volumenTotal) - (this.volumenEnviosEnSucursal);
@@ -56,14 +56,10 @@ class Sucursal (var transporte : Set[Transporte], val volumenTotal : Int, val pa
   def mandarTransporte(tran : Transporte) = {
 	  //El transporte esta en la sucursal y tiene pedidos para enviar?
 	  if (transporte.contains(tran) && (tran.sucursalDestino != null) && (tran.sucursalOrigen != null) && (!tran.enviosAsignados.isEmpty)) {
+		altaDeViaje(tran)
 	    quitarTransporte(tran)
 	    tran.sucursalDestino.recibirEnvio(Some(tran))
 	  }
-
-//    if (!transporteAsignado.isEmpty){
-//      this.transporte -- transporteAsignado
-//      envio.sucursalDestino.recibirEnvio(envio,transporteAsignado)
- //   }
   }
   
   def recibirEnvio(tran: Option[Transporte]) = {
@@ -71,19 +67,26 @@ class Sucursal (var transporte : Set[Transporte], val volumenTotal : Int, val pa
       t.enviosAsignados.foreach(this.envios += _ ) // Pasamos los pedidos a la sucursal
       t.enviosAsignados = Set() // Vaciamos los pedidos del transporte
       t.regresarASucursal // Retorna a la sucursal de origen
-    })
-      
-  }
-
-  
-  def regresoTransporte(transporteAsignado: Option[Transporte]) = {
-    this.transporte ++ transporteAsignado
+    })   
   }
   
   //3. Un paquete se retira de la sucursal destino
   
   def retirarEnvio(envio: Envio) ={
-    this.envios -- Set(envio)
+    this.envios -= envio
   }
   
+  def altaDeViaje (tran: Transporte) = {
+    var unViaje : Viaje = new Viaje(this, tran.sucursalDestino, tran, tran.enviosAsignados, 
+    								tran.calcularCostoViaje, tran.calcularGananciaNeta,
+    								tran.fechaEnvio, nombreClase(tran.enviosAsignados.head), tran.calcularTiempoViaje)
+    tran.viajesRealizados += unViaje
+    this.viajesRealizados += unViaje
+  }
+  
+  def nombreClase(obj : Object): String = {
+    var nombre : String = obj.getClass().toString()
+    nombre = nombre.substring(nombre.lastIndexOf('.')+1)  
+    nombre
+  }
 }
