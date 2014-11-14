@@ -62,10 +62,11 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra], var sucursal
   }
   
   def coincideDestino(envio:Envio) : Boolean = {
-    if(this.sinEnviosAsignados)
-      true
-    else {
-      this.enviosAsignados.forall((e:Envio) => e.sucursalDestino==envio.sucursalDestino);
+   
+    enviosAsignados.size match
+    {
+    	case 0 => true
+    	case _ => this.enviosAsignados.forall((e:Envio) => e.sucursalDestino==envio.sucursalDestino);
     }
   }
 
@@ -85,8 +86,9 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra], var sucursal
   def infraestructuraNecesaria(envio: Envio) : Boolean ={
     envio.caracteristicas.forall(carac => this.serviciosExtra.contains(carac)) 
   }
+  
   //Calcula los costos de todos los envios
-  def calcularCostoViaje() : Double = {
+  def calcularCostoViaje() : Double = { 
     var costoDeTransporte : Double = 0
     var costoDeEnvios : Double = 0
     var costoTotal : Double = 0

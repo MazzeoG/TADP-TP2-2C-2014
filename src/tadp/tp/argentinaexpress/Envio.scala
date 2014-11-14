@@ -46,7 +46,6 @@ class Envio (val caracteristicas : Set[ServicioExtra],
 	    cal.get(Calendar.WEEK_OF_MONTH) == 4
 	  
 	  }
-	  
 	}
 	
 	def pasadoElDia20(): Boolean = {

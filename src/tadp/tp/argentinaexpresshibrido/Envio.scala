@@ -37,17 +37,12 @@ class Envio (val caracteristicas : Set[ServicioExtra],
 	  var cal: Calendar = Calendar.getInstance()
 	  cal.setTime(this.fecha)
 
-	  if (!(cal.get(Calendar.MONTH) == 1)){
-	    
-	    cal.get(Calendar.WEEK_OF_MONTH) == 5
-	    
-	  } else {
-	    
-	    cal.get(Calendar.WEEK_OF_MONTH) == 4
-	  
+	  (cal.get(Calendar.MONTH)) match
+	  {
+	  	case 1=> cal.get(Calendar.WEEK_OF_MONTH) == 4
+	  	case _=> cal.get(Calendar.WEEK_OF_MONTH) == 5
 	  }
-	  
-	}
+	 }
 	
 	def pasadoElDia20(): Boolean = {
 	  var cal: Calendar = Calendar.getInstance()
