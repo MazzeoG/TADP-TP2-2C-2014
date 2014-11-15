@@ -20,11 +20,11 @@ class Sucursal (var transporte : Set[Transporte], val volumenTotal : Int, val pa
   }
   
   def volumenEnviosEnSucursal() : Int ={
-	(this.transporte.map((t:Transporte) => t.volumenEnvios).sum) + (this.envios.map((e:Envio) => e.volumen).sum)
+	(this.transporte.toList.map((t:Transporte) => t.volumenEnvios).sum) + (this.envios.map((e:Envio) => e.volumen).sum)
   }
 
   def volumenEnviosASucursal(destino : Sucursal) : Int ={
-	this.transporte.filter((t: Transporte)=> t.sucursalDestino == destino).map((t:Transporte) => t.volumenEnvios).sum
+	this.transporte.filter((t: Transporte)=> t.sucursalDestino == destino).toList.map((t:Transporte) => t.volumenEnvios).sum
   } 
   
   def asignarEnvioATransporte(envio: Envio): Option[Transporte] = {
@@ -82,11 +82,5 @@ class Sucursal (var transporte : Set[Transporte], val volumenTotal : Int, val pa
     								tran.fechaEnvio, nombreClase(tran.enviosAsignados.head), tran.calcularTiempoViaje)
     tran.viajesRealizados += unViaje
     this.viajesRealizados += unViaje
-  }
-  
-  def nombreClase(obj : Object): String = {
-    var nombre : String = obj.getClass().toString()
-    nombre = nombre.substring(nombre.lastIndexOf('.')+1)  
-    nombre
   }
 }

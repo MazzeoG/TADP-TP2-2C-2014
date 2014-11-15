@@ -26,7 +26,7 @@ extends Terrestre (serviciosExtra, sucursalOrigen){
   
   override def costoSustanciasPeligrosas(): Double ={
     if(enviosAsignados.exists(_.caracteristicas.exists(_.soyInfraestructuraSustancias)))
-      600 + (3 * enviosAsignados.filter(_.isInstanceOf[Urgente]).map(_.volumen).sum / volumenDeCarga )
+      600 + (3 * enviosAsignados.filter(_.isInstanceOf[Urgente]).toList.map(_.volumen).sum / volumenDeCarga )
     else
       0    
   }

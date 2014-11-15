@@ -44,7 +44,7 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra], var sucursal
 //     var volumenOcupado:Int = 0;
 //     this.enviosAsignados.foreach((e:Envio) =>volumenOcupado+= e.volumen)
 //     volumenOcupado
-     this.enviosAsignados.map((e:Envio) => e.volumen).sum
+     this.enviosAsignados.toList.map((e:Envio) => e.volumen).sum
   }
   
   def volumenDisponible() :Int = {
@@ -256,7 +256,7 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra], var sucursal
   }
   
   def calcularGananciaBruta() : Double = {
-    enviosAsignados.map(_.precio).sum
+    enviosAsignados.toList.map(_.precio).sum
   }
   
   def calcularGananciaNeta() : Double = {
