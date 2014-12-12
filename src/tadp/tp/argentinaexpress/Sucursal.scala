@@ -4,7 +4,7 @@ class Sucursal (var transporte : Set[Transporte], val volumenTotal : Int, val pa
 
   var envios : Set[Envio] = Set()
   var volumen:Int = 0
-  var viajesRealizados : Set[Viaje] = Set() 
+  var viajesRealizados : Set[Viaje] = Set()
   
   def volumenDisponible():Int={
     (this.volumenTotal) - (this.volumenEnviosEnSucursal);
@@ -57,9 +57,15 @@ class Sucursal (var transporte : Set[Transporte], val volumenTotal : Int, val pa
 	  //El transporte esta en la sucursal y tiene pedidos para enviar?
 	  if (transporte.contains(tran) && (tran.sucursalDestino != null) && (tran.sucursalOrigen != null) && (!tran.enviosAsignados.isEmpty)) {
 		altaDeViaje(tran)
+
 	    quitarTransporte(tran)
 	    tran.sucursalDestino.recibirEnvio(Some(tran))
 	  }
+
+
+
+
+
   }
   
   def recibirEnvio(tran: Option[Transporte]) = {
@@ -68,6 +74,14 @@ class Sucursal (var transporte : Set[Transporte], val volumenTotal : Int, val pa
       t.enviosAsignados = Set() // Vaciamos los pedidos del transporte
       t.regresarASucursal // Retorna a la sucursal de origen
     })   
+
+
+
+
+
+
+
+
   }
   
   //3. Un paquete se retira de la sucursal destino
@@ -83,7 +97,4 @@ class Sucursal (var transporte : Set[Transporte], val volumenTotal : Int, val pa
     tran.viajesRealizados += unViaje
     this.viajesRealizados += unViaje
   }
-  
-  
-  
 }
