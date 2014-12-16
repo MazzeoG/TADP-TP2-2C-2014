@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat
 import java.util.{Calendar, Date}
 
 abstract class Transporte (val serviciosExtra : Set[ServicioExtra], var sucursalOrigen: Sucursal)
-    extends CalculadorDistancia with Estadisticas{
+    extends Estadisticas{
   val volumenDeCarga : Int
   val costoPorKm : Int
   val velocidad : Int
@@ -19,13 +19,6 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra], var sucursal
   if (sucursalOrigen != null)
 	  sucursalOrigen.agregarTransporte(this)
   
-  
-  
-  //Esta repetido! volumenDisponible()
-  def espacioDisponible():Int={
-    this.volumenDeCarga - this.volumenEnvios
-  }
-
   def puedeCargarUrgentes() ={
     true
   }
@@ -53,7 +46,7 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra], var sucursal
   
   //Funcion utilizada para validar que un transporte pueda cargar un envio
   def puedeCargar(envio:Envio) : Boolean ={
-    coincideDestino(envio) && entraEnTransporte(envio) && entraEnAvion(envio) &&
+    coincideDestino(envio) && entraEnTransporte(envio) &&
     infraestructuraNecesaria(envio) && coincideTipoDeEnvio(envio) && envio.esCargablePor(this)
   }
   
@@ -69,20 +62,11 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra], var sucursal
     var clase = envio.getClass()
     enviosAsignados.forall(_.getClass() == clase)
   }
-  
-  //Si el transporte cuyo envio esta siendo cargado es un avion, valida que la distancia sea mayor a 1000
-  def entraEnDestino(envio:Envio): Boolean ={
-    envio.sucursalDestino.volumenDisponible >= envio.volumen
-  }
-  
+    
   def entraEnTransporte(envio:Envio) : Boolean ={
     this.volumenDisponible >= envio.volumen
   }
-  
-  def entraEnAvion(envio : Envio) : Boolean ={
-    true
-  }
-  
+    
   def infraestructuraNecesaria(envio: Envio) : Boolean ={
     envio.caracteristicas.forall(carac => this.serviciosExtra.contains(carac)) 
   }
@@ -145,7 +129,8 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra], var sucursal
   }
   
   def precioPeajes():Int={
-    (cantidadPeajesEntre(sucursalOrigen,sucursalDestino) * this.valorPeaje)
+    val calc = new CalculadorDistancia
+    (calc.cantidadPeajesEntre(sucursalOrigen,sucursalDestino) * this.valorPeaje)
   }
   
   def multiplicador():Double= {
