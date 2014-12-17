@@ -59,8 +59,7 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra], var sucursal
   }
 
   def coincideTipoDeEnvio(envio: Envio) : Boolean ={
-    var clase = envio.getClass()
-    enviosAsignados.forall(_.getClass() == clase)
+    enviosAsignados.forall(_.puedeEnviarseCon(envio))
   }
     
   def entraEnTransporte(envio:Envio) : Boolean ={
@@ -81,61 +80,18 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra], var sucursal
         costoTotal += costoDeEnvios 
 
         //EXTRA FACTORES
-        //Los vehiculos terrestres se ven afectados por peajes, donde los camiones pagan $12 por cada peaje y las furgonetas pagan $6.
-        //Dentro de los vehiculos terrestres, los paquetes que necesiten refrigeracion suman al costo $5 por cada uno.
-        costoTotal += precioPeajes()
-        
-        // Dentro de los terrestres, los paquetes que necesiten refrigeracion suman al costo $5 por c/u
-        costoTotal += costoDeRefrigeracion()
-        
-        // Los aviones que no se ven afectados por peajes pero pagan 10% de impuestos cuando se desplazan entre sucursales de distintos paises.
-	    if (sucursalOrigen.pais != this.sucursalDestino.pais){
-	    	costoTotal += (costoDeTransporte * impuestoAvion)
-	    }
-    	
-    	// Cuando un camion va a la sucursal Casa Central en la ultima semana del mes, se le suma un 2% al costo ya
-    	// que se lo dejara alli un dia para revision tecnica.
-    	if (this.sucursalDestino.esCasaCentral() && this.ultimaSemanaDelMes()) {
-    		costoTotal += costoRevisionTecnica(costoDeTransporte)
-    	}
-    	
-    	// Pasado el dia 20 los aviones que viajen a casa central reducen sus costos en 20% al traer insumos de vuelta
-    	if (pasadoElDia20 && sucursalDestino.esCasaCentral)
-    	  costoTotal -= reduccionInsumos(costoDeTransporte)
-    	  
-    	// Los transportes que hagan un viaje con menos del 20% de su volumen ocupado afectan su costo. 
-    	// Aviones x3 | Furgonetas x2 (Salvo 3+ paquetes urgentes)| Camiones x(1+(VolOcupado/VolTotal)) Salvo Casa Central  
-    	costoTotal += costoDeTransporte * multiplicador
-   
-    	// Los vehiculos que posean GPS suman al costo $0.5 por KM recorrido (ida y vuelta)
-    	costoTotal += costoGPS
-    	
-    	// Los vehiculos que posean Video suman al costo $3.74 por KM recorrido (ida y vuelta)
-    	costoTotal += costoVideo
-    	
-    	// Si en un envio hay sustancias peligrosas => +$600; Los camiones tienen un extra por Urgentes
-    	costoTotal += costoSustanciasPeligrosas
-    	
-    	// Si en un envio hay animales => +$50 < 100km ; +$86 < 200km ; +$137 > 200km
-    	costoTotal += costoAnimales
+        costoTotal += ((costoDeTransporte * multiplicador) + costosExtra(costoDeTransporte))
       }
     costoTotal
   }
   
   def costoTransporte(sucursalOrigen: Sucursal, sucursalDestino: Sucursal) : Double = {
-    
     this.costoPorKm * this.distanciaEntreSucursales()
-   
   }
   
-  def precioPeajes():Int={
-    val calc = new CalculadorDistancia
-    (calc.cantidadPeajesEntre(sucursalOrigen,sucursalDestino) * this.valorPeaje)
-  }
-  
-  def multiplicador():Double= {
-	1
-  }
+  // Los transportes que hagan un viaje con menos del 20% de su volumen ocupado afectan su costo. 
+  // Aviones x3 | Furgonetas x2 (Salvo 3+ paquetes urgentes)| Camiones x(1+(VolOcupado/VolTotal)) Salvo Casa Central
+  def multiplicador():Double= 1
   
   def agregarEnvio(envio : Envio): Transporte = {
     this.enviosAsignados = this.enviosAsignados ++ Set(envio)
@@ -143,35 +99,17 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra], var sucursal
       sucursalDestino = envio.sucursalDestino
       fechaEnvio = envio.fecha
     }
-    	
     this
   }
   
-  def tieneSeguimientoGPS(): Boolean = {
-    !this.serviciosExtra.find((s: ServicioExtra) => s.soyGPS).isEmpty
-  }
+  def tieneSeguimientoGPS(): Boolean = !this.serviciosExtra.find((s: ServicioExtra) => s.soyGPS).isEmpty
   
-  def tieneSeguimientoVideo(): Boolean = {
-    !this.serviciosExtra.find((s: ServicioExtra) => s.soyVideo).isEmpty
-  }
+  def tieneSeguimientoVideo(): Boolean = !this.serviciosExtra.find((s: ServicioExtra) => s.soyVideo).isEmpty
   
-   // Falta definir la mutua exclusion
-  def puedeLlevarAnimales() : Boolean = {
-    !this.serviciosExtra.find((s: ServicioExtra) => s.soyInfraestructuraAnimales).isEmpty
-  }
+  def puedeLlevarAnimales() : Boolean = !this.serviciosExtra.find((s: ServicioExtra) => s.soyInfraestructuraAnimales).isEmpty
   
-  def puedeLlevarSustancias() : Boolean = {
-    !this.serviciosExtra.find((s: ServicioExtra) => s.soyInfraestructuraSustancias).isEmpty
-  }
+  def puedeLlevarSustancias() : Boolean = !this.serviciosExtra.find((s: ServicioExtra) => s.soyInfraestructuraSustancias).isEmpty
   
-  def impuestoAvion() : Double = {
-    0
-  }
-  
-  def costoDeRefrigeracion(): Double ={
-    0
-  }
-
   def ultimaSemanaDelMes(): Boolean = {
     var cal: Calendar = Calendar.getInstance()
 	cal.setTime(fechaEnvio)
@@ -189,11 +127,8 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra], var sucursal
 	cal.get(Calendar.DAY_OF_MONTH) > 20
   }
   
-  def costoRevisionTecnica(costoDeTransporte: Double): Double ={
-    0
-  }
-  
   def costoGPS(): Double ={
+    // Los vehiculos que posean GPS suman al costo $0.5 por KM recorrido (ida y vuelta)
     if(serviciosExtra.exists(_.soyGPS))
       distanciaEntreSucursales()*2*0.5
     else
@@ -201,24 +136,25 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra], var sucursal
   }
   
   def costoVideo(): Double ={
+    // Los vehiculos que posean Video suman al costo $3.74 por KM recorrido (ida y vuelta)
     if(serviciosExtra.exists(_.soyVideo))
       distanciaEntreSucursales()*2*3.74
     else
       0
   }  
 
-  def distanciaEntreSucursales(): Double ={
-    0
-  }
+  def distanciaEntreSucursales(): Double = 0
   
   def costoSustanciasPeligrosas(): Double ={
+    // Si en un envio hay sustancias peligrosas => +$600; Los camiones tienen un extra por Urgentes
     if(enviosAsignados.exists(_.caracteristicas.exists(_.soyInfraestructuraSustancias)))
       600
     else
       0
   }
   
-    def costoAnimales(): Double ={
+  def costoAnimales(): Double ={
+    // Si en un envio hay animales => +$50 < 100km ; +$86 < 200km ; +$137 > 200km
     val dist = distanciaEntreSucursales 
     if(enviosAsignados.exists(_.caracteristicas.exists(_.soyInfraestructuraAnimales)))
       if (dist < 100)
@@ -230,27 +166,20 @@ abstract class Transporte (val serviciosExtra : Set[ServicioExtra], var sucursal
     else
     	0
   }
-    
-  def reduccionInsumos(costoDeTransporte: Double): Double = {
-    0
-  }
-  
+      
   def regresarASucursal() ={
    sucursalOrigen.agregarTransporte(this) 
    sucursalDestino = null
   }
   
-  def calcularGananciaBruta() : Double = {
-    enviosAsignados.toList.map(_.precio).sum
-  }
+  def calcularGananciaBruta() : Double = enviosAsignados.toList.map(_.precio).sum
   
-  def calcularGananciaNeta() : Double = {
-    calcularGananciaBruta - calcularCostoViaje
-  }  
+  def calcularGananciaNeta() : Double = calcularGananciaBruta - calcularCostoViaje
   
-  def calcularTiempoViaje() : Double = {
-    distanciaEntreSucursales / velocidad
+  def calcularTiempoViaje() : Double = distanciaEntreSucursales / velocidad
+  
+  def costosExtra(costoDeTransporte:Double) : Double = {
+    costoGPS + costoVideo + costoSustanciasPeligrosas + costoAnimales
   }
 }
-
 

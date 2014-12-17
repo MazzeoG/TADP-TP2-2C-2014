@@ -20,8 +20,13 @@ extends Terrestre (serviciosExtra, sucursalOrigen){
      1  
   } 
   
-  override def costoRevisionTecnica(costoDeTransporte: Double): Double ={
-     costoDeTransporte * 0.02
+  def costoRevisionTecnica(costoDeTransporte: Double): Double ={
+    // Cuando un camion va a la sucursal Casa Central en la ultima semana del mes, se le suma un 2% al costo ya
+    // que se lo dejara alli un dia para revision tecnica.
+    if (this.sucursalDestino.esCasaCentral() && this.ultimaSemanaDelMes()) 
+    	costoDeTransporte * 0.02
+    else
+    	0
    }
   
   override def costoSustanciasPeligrosas(): Double ={
@@ -30,4 +35,8 @@ extends Terrestre (serviciosExtra, sucursalOrigen){
     else
       0    
   }
+  
+  override def costosExtra(costoDeTransporte:Double) : Double = {
+    super.costosExtra(costoDeTransporte) + costoRevisionTecnica(costoDeTransporte)
+  } 
  }

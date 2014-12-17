@@ -13,7 +13,7 @@ extends Aereo (serviciosExtra, sucursalOrigen){
     calc.distanciaAereaEntre(envio.sucursalOrigen , envio.sucursalDestino ) > 1000
   }
   
-  override def impuestoAvion() : Double = {
+  def impuestoAvion() : Double = {
     0.1
   }
   
@@ -24,11 +24,27 @@ extends Aereo (serviciosExtra, sucursalOrigen){
      1  
   }
 
-  override def reduccionInsumos(costoDeTransporte: Double): Double = {
-    costoDeTransporte * 0.2
+  def reduccionInsumos(costoDeTransporte: Double): Double = {
+    // Pasado el dia 20 los aviones que viajen a casa central reducen sus costos en 20% al traer insumos de vuelta
+    if (pasadoElDia20 && sucursalDestino.esCasaCentral)
+    	costoDeTransporte * 0.2
+    else
+    	0
   }
   
   override def puedeCargar(envio:Envio) : Boolean ={
     super.puedeCargar(envio) && entraEnAvion(envio)
   }
+  
+  def impuestoVueloInternacional(costoDeTransporte:Double) : Double = {
+     // Los aviones que no se ven afectados por peajes pero pagan 10% de impuestos cuando se desplazan entre sucursales de distintos paises.
+	    if (sucursalOrigen.pais != this.sucursalDestino.pais)
+	    	costoDeTransporte * impuestoAvion
+	    else
+	        0
+  }
+  
+  override def costosExtra(costoDeTransporte:Double) : Double = {
+    super.costosExtra(costoDeTransporte) + impuestoVueloInternacional(costoDeTransporte) - reduccionInsumos(costoDeTransporte)
+  }  
 }

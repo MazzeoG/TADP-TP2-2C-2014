@@ -58,4 +58,8 @@ class Envio (val caracteristicas : Set[ServicioExtra],
 	def esCargablePor(transporte: Transporte) : Boolean = {
 	  true
 	}
+	
+	def puedeEnviarseCon (envio: Envio): Boolean = {
+	  true
+    }
 }

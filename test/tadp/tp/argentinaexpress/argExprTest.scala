@@ -370,11 +370,6 @@ class TransporteTest {
     			 camion1.calcularCostoViaje, //actual
     			 0.01) //Delta         
   }  
-  
-  @Test
-  def `calculo de la ganancia bruta` = {
-    
-  }  
 }
 
 
