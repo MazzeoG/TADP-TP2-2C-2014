@@ -60,6 +60,9 @@ class Envio (val caracteristicas : Set[ServicioExtra],
 	}
 	
 	def puedeEnviarseCon (envio: Envio): Boolean = {
-	  true
+	  val claseObjeto:String=this.getClass().getName()
+	  val claseEnvio:String=envio.getClass().getName()
+	  claseObjeto==claseEnvio
+	  //true
     }
 }

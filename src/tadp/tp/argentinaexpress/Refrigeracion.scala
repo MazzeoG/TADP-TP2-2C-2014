@@ -18,7 +18,7 @@ extends Envio (caracteristicas, sucursalOrigen, sucursalDestino, volumen, fecha)
 	  transporte.puedeCargarRefrigerados
 	}
 	
-	override def puedeEnviarseCon (envio: Envio): Boolean = {
+/*	override def puedeEnviarseCon (envio: Envio): Boolean = {
 	  envio.isInstanceOf[Refrigeracion]
-	}	
+	}	*/
 }

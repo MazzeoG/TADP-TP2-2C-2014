@@ -33,14 +33,14 @@ class TransporteTest {
   def `las caracteristicas deben ser las mismas` = {
     var unEnvioNormal = new Normal(Set(),sucursalArg,sucursalChi,10,new Date(2014,11,7))
     var otroEnvioNormal = new Normal(Set(),sucursalArg,sucursalChi,10,new Date(2014,11,7))
-    var unEnvioUrgente = new Fragil(Set(),sucursalArg,sucursalChi,10,new Date(2014,11,7))
+    var unEnvioFragil = new Fragil(Set(),sucursalArg,sucursalChi,10,new Date(2014,11,7))
     
     sucursalArg.asignarEnvioATransporte(unEnvioNormal)
     sucursalArg.asignarEnvioATransporte(otroEnvioNormal)
-    sucursalArg.asignarEnvioATransporte(unEnvioUrgente)
+    sucursalArg.asignarEnvioATransporte(unEnvioFragil)
     assertTrue(camion1.enviosAsignados.contains(unEnvioNormal))
     assertTrue(camion1.enviosAsignados.contains(otroEnvioNormal))
-    assertFalse(camion1.enviosAsignados.contains(unEnvioUrgente))
+    assertFalse(camion1.enviosAsignados.contains(unEnvioFragil))
   }  
 
   
