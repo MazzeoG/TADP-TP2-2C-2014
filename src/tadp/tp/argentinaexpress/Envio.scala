@@ -8,7 +8,7 @@ class Envio (val caracteristicas : Set[ServicioExtra],
 			val sucursalDestino :Sucursal,
 			val volumen :Int,
 			val fecha :Date)
-	extends CalculadorDistancia{
+	{
   
 	val valorRefrigeracion : Int = 0;
   
