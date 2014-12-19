@@ -34,13 +34,14 @@ class TransporteTest {
     var unEnvioNormal = new Normal(Set(),sucursalArg,sucursalChi,10,new Date(2014,11,7))
     var otroEnvioNormal = new Normal(Set(),sucursalArg,sucursalChi,10,new Date(2014,11,7))
     var unEnvioFragil = new Fragil(Set(),sucursalArg,sucursalChi,10,new Date(2014,11,7))
-    
+        
     sucursalArg.asignarEnvioATransporte(unEnvioNormal)
     sucursalArg.asignarEnvioATransporte(otroEnvioNormal)
     sucursalArg.asignarEnvioATransporte(unEnvioFragil)
+
+    assertFalse(camion1.enviosAsignados.contains(unEnvioFragil))
     assertTrue(camion1.enviosAsignados.contains(unEnvioNormal))
     assertTrue(camion1.enviosAsignados.contains(otroEnvioNormal))
-    assertFalse(camion1.enviosAsignados.contains(unEnvioFragil))
   }  
 
   

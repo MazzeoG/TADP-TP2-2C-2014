@@ -19,18 +19,7 @@ class Envio (val caracteristicas : Set[ServicioExtra],
 	def costoBase():Int = {0}
 	
 	def calcularCostoEnvio () : Double = {
-	  this.costoBase()
-/*	  
-	  // Los aviones que vayan a Casa Central pasado el dia 20, aprovechan para volver a la sucursal de origen
-	  //enviandoles insumos necesarios para el funcionamiento de la empresa, de esta forma el costo de ese envio se
-	  //vera reducido en un 20 %.
-	  
-	  if(this.sucursalDestino.esCasaCentral() && this.pasadoElDia20()){
-	    costoParcial -= costoDeTransporte * 2/10
-	  }
-		
-	  costoParcial
-*/	  
+	  this.costoBase()  
     }
   
 	def ultimaSemanaDelMes(): Boolean = {
@@ -59,10 +48,11 @@ class Envio (val caracteristicas : Set[ServicioExtra],
 	  true
 	}
 	
-	def puedeEnviarseCon (envio: Envio): Boolean = {
-	  val claseObjeto:String=this.getClass().getName()
-	  val claseEnvio:String=envio.getClass().getName()
-	  claseObjeto==claseEnvio
-	  //true
-    }
+	def puedeEnviarseCon (envio :Envio): Boolean = true
+	
+	def puedeEnviarseConFragiles : Boolean = true
+	def puedeEnviarseConNormal : Boolean = true
+	def puedeEnviarseConRefrigeracion : Boolean = true
+	def puedeEnviarseConUrgentes : Boolean = true
+		
 }
